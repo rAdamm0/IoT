@@ -1,0 +1,17 @@
+#define LR1 11
+#define LR2 3
+#define LG1 6
+#define LG2 5
+
+#define B1 2
+#define B2 4
+
+#define NUM_PLAYERS 2
+
+#define WELCOME "Welcome to the React! Game. Press Buttons to Start"
+#define START "Go!"
+#define WINNER "Game Over - The winner is"
+#define TIE "Game Over - Tie"
+
+#define MAX_WAIT 5000
+#define BOUNCING 100
