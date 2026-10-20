@@ -16,9 +16,9 @@ void sleep();
 void wakeUp();
 
 /**
-  Functions to start the sleep timer in the initial phase
+  Returns true if its time for the system to go to sleep, false otherwise
 */
-void sleepTimerStart();
+bool timeToSleep();
 
 /**
   Functions to reset the timer in case of state change

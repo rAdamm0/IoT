@@ -23,3 +23,8 @@ void addCount(int player);
   Terminates the round and counts the points and returns the index of the winner
 */
 int endRound();
+
+/**
+  At the end of the game it returns the index of the winning player
+*/
+int getWinner();

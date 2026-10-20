@@ -1,3 +1,4 @@
+#include "sleep.h"
 #include "states.h"
 
 long enterStateTime;
@@ -11,6 +12,8 @@ void initialize(){
   state = INITIAL;
   enterStateTime = millis();
   bootTime = millis();
+  Timer1.initialize(1000000);
+  Timer1.attachInterrupt(countSeconds);
 }
 
 /**
@@ -40,5 +43,10 @@ State getState(){
 void changeState(State newState){
   if(newState != state){
     state = newState
+    if(state == INITIAL){
+      initializeSleep();
+    } else {
+      sleepTimerStop();
+    }
   }
 }

@@ -24,3 +24,13 @@ State getState();
   Function that changes the state
 */
 void changeState(State newState);
+
+/**
+  Function to count the time in seconds
+*/
+void countSeconds();
+
+/**
+
+*/
+void getSeconds();

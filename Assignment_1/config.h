@@ -1,3 +1,6 @@
+#ifndef ___CONFIG___
+#define ___CONFIG___
+
 #define LR1 11
 #define LR2 3
 #define LG1 6
@@ -13,5 +16,8 @@
 #define WINNER "Game Over - The winner is"
 #define TIE "Game Over - Tie"
 
+#define SLEEP_TIME 10//seconds
 #define MAX_WAIT 5000
 #define BOUNCING 100
+
+#endif
