@@ -1,4 +1,5 @@
-
+#ifndef ___PLAYER___
+#define ___PLAYER___
 /**
   Returns the score of the player with the index in input
 */
@@ -28,3 +29,4 @@ int endRound();
   At the end of the game it returns the index of the winning player
 */
 int getWinner();
+#endif

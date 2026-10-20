@@ -1,5 +1,8 @@
 #include "sleep.h"
 #include "states.h"
+#include "kernel.h"
+
+#include <Arduino.h>
 
 long enterStateTime;
 long bootTime;
@@ -8,12 +11,10 @@ State state;
 /**
   Functions that initializes the time management system and state
 */
-void initialize(){
-  state = INITIAL;
+void initializeKernel(){
+  changeState(INITIAL);
   enterStateTime = millis();
   bootTime = millis();
-  Timer1.initialize(1000000);
-  Timer1.attachInterrupt(countSeconds);
 }
 
 /**
@@ -41,12 +42,16 @@ State getState(){
   Function that changes the state
 */
 void changeState(State newState){
+  enterStateTime = millis();
   if(newState != state){
-    state = newState
-    if(state == INITIAL){
-      initializeSleep();
-    } else {
-      sleepTimerStop();
+    state = newState;
+    switch(state){
+      case INITIAL:
+        initializeStart();
+
+       break;
+      case ROUND: break;
+      case END: break;
     }
   }
 }

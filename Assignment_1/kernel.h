@@ -1,9 +1,12 @@
+#ifndef ___KERNEL___
+#define ___KERNEL___
+
 #include "states.h"
 
 /**
   Functions that initializes the time management system and state
 */
-void initialize();
+void initializeKernel();
 
 /**
   Function that returns the time elapsed from the accension of the device
@@ -34,3 +37,5 @@ void countSeconds();
 
 */
 void getSeconds();
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef ___STATES___
+#define ___STATES___
+
 /**
   Enum of the possible states of the system
 */
@@ -6,7 +9,7 @@ enum State {
   ROUND,
   END,
   SLEEP
-} 
+};
 
 /**
   Initializes the system for its initial phase
@@ -32,3 +35,4 @@ void gameOverTimer();
   Starts the end game and reset timer
 */
 void endTimer();
+#endif

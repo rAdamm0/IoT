@@ -1,6 +1,5 @@
 #include <TimerOne.h>
 #include <avr/sleep.h>
-#include <EnableInterrupt.h>
 
 volatile int seconds = 0;
 
@@ -9,16 +8,13 @@ volatile int seconds = 0;
 */
 void countSeconds(){
   seconds++;
-  if(seconds == 10 ){
-    interrupts();
-    sleep();
-  }
 }
 
 /**
   Initialize the system to go into a phase to sleep
 */
-void initializeSleep(){
+void initializeTimer(){
+  seconds = 0;
   Timer1.initialize(1000000);
   Timer1.attachInterrupt(countSeconds);
 
@@ -27,7 +23,9 @@ void initializeSleep(){
 /**
   Sets the system into sleep mode
 */
-void sleep();
+void sleep(){
+  
+}
 
 /**
   Function used to solely wake the system
@@ -36,20 +34,19 @@ void wakeUp(){}
 
 /**
   Checks if it's time to sleep, and sleeps if it is
+  @param time seconds to check if have elapsed
 */
-void timeToSleep(){
+bool hasTimeElapsed(int time){
   int tempSeconds;
   noInterrupts();
   tempSeconds = seconds;
   interrupts();
-  if(tempSeconds == 10){
-    sleep();
-  }
+  return tempSeconds >= time;
 }
 
 /**
   Functions to reset the timer in case of state change
 */
-void sleepTimerStop(){
+void timerStop(){
   Timer1.detachInterrupt();
 }
