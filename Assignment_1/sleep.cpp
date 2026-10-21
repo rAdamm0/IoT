@@ -1,3 +1,6 @@
+#include "buttons.h"
+#include "states.h"
+
 #include <TimerOne.h>
 #include <avr/sleep.h>
 
@@ -24,7 +27,16 @@ void initializeTimer(){
   Sets the system into sleep mode
 */
 void sleep(){
-  
+  off();
+  attachWakeUp();
+  Serial.println("Going to sleep...");
+  delay(1000);
+  set_sleep_mode(LEEP_MODE_PWR_DOWN);
+  sleep_enable();
+  interrupts();
+  sleep_mode();
+  sleep_disable();
+  initializeStart();
 }
 
 /**

@@ -2,9 +2,11 @@
 #include "sleep.h"
 #include "buttons.h"
 #include "config.h"
+#include "leds.h"
 
 void setup() {
   // put your setup code here, to run once:
+  Serial.begin(115200);
   initializeKernel();
 }
 
@@ -19,6 +21,7 @@ void loop() {
     if(hasTimeElapsed(SLEEP_TIME)){
       sleep();
     }
+    fading();
     break;
     case ROUND:
     break;

@@ -10,7 +10,6 @@
 void initializeStart(){
   initializeTimer();
   attachGameStart();
-  fading();
   changeMessage(WELCOME);
 }
 
