@@ -1,11 +1,13 @@
 #include "config.h"
 #include "sleep.h"
+#include "player.h"
 
 #include <EnableInterrupt.h>
 #include <Arduino.h>
 
 int buttons[] = {B1, B2};
 int startGameCounters[] = {0, 0};
+double lastPressed[] = {};
 
 /**
   Attaches to the buttons the function to wake up the system after it goes to sleep
@@ -46,17 +48,31 @@ bool startingGame(){
 /**
   Attaches to the buttons the function to count the button presses.
 */
-void attachCounter();
+void attachCounter(){
+  for (int i = 0; i < NUM_PLAYERS; i++){
+    pinMode(buttons[i], INPUT_PULLUP);
+    enableInterrupt(buttons[i], pressCounts, FALLING);
+  }
+  lastPressed = {0,0};
+}
 /**
   Returns 1 if the buttons is pressed (or has been in a certain interval), 0 otherwise.
 */
-bool isButtonPressed(int numButton);
+bool isButtonPressed(int numButton){
+  return millis() - lastPressed[numButton] < BOUNCING_TIME;
+}
 /**
   Counter function that determines if a button press is to be counted and do so if needed.
   One function for each player.
 */
-void pressCountP1();
-void pressCountP2();
+void pressCounts(){
+  for(int i = 0; i < NUM_PLAYERS; i++){
+    if(digitalRead(buttons[i]) == HIGH && !isButtonPressed(i)){=
+        lastPressed[i] = millis();
+        addCount(i);
+    }
+  }
+}
 
 /**
   Function that starts the game changing the State of the system
