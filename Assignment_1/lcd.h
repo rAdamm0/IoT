@@ -11,7 +11,7 @@ void changeMessage(const char* message);
 void updateScreen();
 
 /**
-  Sets the message to scroll over the LCD, where boolean is 0 when not scrolling and 1 for scrolling
+  Sets the message to scroll over the LCD
 */
-void scrolling(bool boolean);
+void scrolling( );
 #endif

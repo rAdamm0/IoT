@@ -3,6 +3,7 @@
 #include "buttons.h"
 #include "config.h"
 #include "leds.h"
+#include "lcd.h"
 
 void setup() {
   // put your setup code here, to run once:
@@ -15,13 +16,14 @@ void loop() {
   State state = getState();
   switch(state){
     case INITIAL:
-    if(startingGame()){
-      changeState(ROUND);
-    }
-    if(hasTimeElapsed(SLEEP_TIME)){
-      sleep();
-    }
-    fading();
+      if(startingGame()){
+        changeState(ROUND);
+      }
+      if(hasTimeElapsed(SLEEP_TIME)){
+        sleep();
+      }
+      fading();
+      updateScreen();
     break;
     case ROUND:
     break;
