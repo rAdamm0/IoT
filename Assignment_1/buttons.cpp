@@ -7,7 +7,7 @@
 
 int buttons[] = {B1, B2};
 int startGameCounters[] = {0, 0};
-double lastPressed[] = {};
+unsigned long lastPressed[] = {0,0};
 
 /**
   Attaches to the buttons the function to wake up the system after it goes to sleep
@@ -46,6 +46,26 @@ bool startingGame(){
 }
 
 /**
+  Returns 1 if the buttons is pressed (or has been in a certain interval), 0 otherwise.
+*/
+bool isButtonPressed(int numButton){
+  return (millis() - lastPressed[numButton]) < BOUNCING_TIME;
+}
+
+/**
+  Counter function that determines if a button press is to be counted and do so if needed.
+  One function for each player.
+*/
+void pressCounts(){
+  for(int i = 0; i < NUM_PLAYERS; i++){
+    if(digitalRead(buttons[i]) == HIGH && !isButtonPressed(i)){
+        lastPressed[i] = millis();
+        addCount(i);
+    }
+  }
+}
+
+/**
   Attaches to the buttons the function to count the button presses.
 */
 void attachCounter(){
@@ -53,25 +73,7 @@ void attachCounter(){
     pinMode(buttons[i], INPUT_PULLUP);
     enableInterrupt(buttons[i], pressCounts, FALLING);
   }
-  lastPressed = {0,0};
-}
-/**
-  Returns 1 if the buttons is pressed (or has been in a certain interval), 0 otherwise.
-*/
-bool isButtonPressed(int numButton){
-  return millis() - lastPressed[numButton] < BOUNCING_TIME;
-}
-/**
-  Counter function that determines if a button press is to be counted and do so if needed.
-  One function for each player.
-*/
-void pressCounts(){
-  for(int i = 0; i < NUM_PLAYERS; i++){
-    if(digitalRead(buttons[i]) == HIGH && !isButtonPressed(i)){=
-        lastPressed[i] = millis();
-        addCount(i);
-    }
-  }
+  memset(lastPressed, 0, sizeof(lastPressed));
 }
 
 /**

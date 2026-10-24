@@ -1,5 +1,6 @@
 #include "buttons.h"
 #include "states.h"
+#include "leds.h"
 
 #include <TimerOne.h>
 #include <avr/sleep.h>
@@ -31,7 +32,7 @@ void sleep(){
   attachWakeUp();
   Serial.println("Going to sleep...");
   delay(1000);
-  set_sleep_mode(LEEP_MODE_PWR_DOWN);
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   sleep_enable();
   interrupts();
   sleep_mode();
