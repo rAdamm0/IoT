@@ -6,16 +6,24 @@ int redLeds[] = {LR1, LR2};
 int greenLeds[] = {LG1, LG2};
 
 int brightness[] = {255, 0};
-int fadeAmount = 5;
+int fadeAmount = 1;
+
+bool initiated = false;
 /**
   Fading leds for the pre-game phase
 */
 void fading(){
-  for(int i = 0; i < NUM_PLAYERS; i++){
-    pinMode(redLeds[i],brightness[i]);
-    brightness[i] = brightness[i] + (pow(-1,i)*fadeAmount);
+  if(!initiated){
+    for(int i = 0; i < NUM_PLAYERS; i++){
+      pinMode(redLeds[i],OUTPUT);
+    }
+    initiated = true;
   }
-  if(brightness[0] == 255){
+  for(int i = 0; i < NUM_PLAYERS; i++){
+    analogWrite(redLeds[i], brightness[i]);
+    brightness[i] = brightness[i] + (pow(-1,i+1)*fadeAmount);
+  }
+  if(brightness[0] == 255 || brightness[0] == 0){
     fadeAmount = -fadeAmount;
   }
 }
