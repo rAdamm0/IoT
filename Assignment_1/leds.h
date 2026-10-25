@@ -13,5 +13,5 @@ void roundWon(int winner);
 /**
   Turns off all the leds
 */
-void off();
+void ledsOff();
 #endif

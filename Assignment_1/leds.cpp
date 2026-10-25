@@ -41,7 +41,7 @@ void roundWon(int winner){
 /**
   Turns off all the leds
 */
-void off(){
+void ledsOff(){
   for(int i = 0; i < NUM_PLAYERS; i++){
     digitalWrite(redLeds[i], LOW);
     digitalWrite(greenLeds[i], LOW);

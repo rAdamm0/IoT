@@ -22,8 +22,8 @@ void initializeGame(){
   changeMessage("", false);
   timerStop();
   attachCounter();
-  off();
   lcdOff();
+  ledsOff();
 }
 
 /**

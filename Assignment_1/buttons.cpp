@@ -60,12 +60,10 @@ void processButtonPresses() {
   if (pressed1 && startGameCounters[0] == 0) {
     startGameCounters[0] = 1;
     initializeTimer();
-    Serial.println("Button 8 pressed");
   }
   if (pressed2 && startGameCounters[1] == 0) {
     startGameCounters[1] = 1;
     initializeTimer();
-    Serial.println("Button 4 pressed");
   }
 }
 
@@ -110,8 +108,8 @@ void attachCounter(){
   for (int i = 0; i < NUM_PLAYERS; i++){
     pinMode(buttons[i], INPUT_PULLUP);
   }
-  enableInterrupt(buttons[0], pressCounts, FALLING);
-  enableInterrupt(buttons[1], pressCounts, FALLING);
+  enableInterrupt(buttons[0], pressCountP1, FALLING);
+  enableInterrupt(buttons[1], pressCountP2, FALLING);
   memset(lastPressed, 0, sizeof(lastPressed));
 }
 

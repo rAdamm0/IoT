@@ -29,7 +29,7 @@ void initializeTimer(){
   Sets the system into sleep mode
 */
 void sleep(){
-  off();
+  ledsOff();
   lcdOff();
   attachWakeUp();
   delay(1000);
