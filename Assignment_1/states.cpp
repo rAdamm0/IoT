@@ -23,6 +23,7 @@ void initializeGame(){
   timerStop();
   attachCounter();
   off();
+  lcdOff();
 }
 
 /**

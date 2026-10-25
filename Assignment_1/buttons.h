@@ -18,6 +18,11 @@ void startGameCounter();
 bool startingGame();
 
 /**
+  Processes the button presses there have been
+*/
+void processButtonPresses();
+
+/**
   Attaches to the buttons the function to count the button presses.
 */
 void attachCounter();

@@ -15,6 +15,7 @@ void loop() {
   State state = getState();
   switch(state){
     case INITIAL:
+      processButtonPresses();
       if(startingGame()){
         changeState(ROUND);
       }

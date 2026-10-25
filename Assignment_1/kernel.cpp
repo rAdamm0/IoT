@@ -49,7 +49,9 @@ void changeState(State newState){
       case INITIAL:
         initializeStart();
        break;
-      case ROUND: break;
+      case ROUND:
+        initializeGame();
+       break;
       case END: break;
     }
   }
