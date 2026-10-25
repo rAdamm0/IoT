@@ -10,11 +10,8 @@
   Initializes the system for its initial phase
 */
 void initializeStart(){
-  Serial.println("Initializing Timer");
   initializeTimer();
-  Serial.println("Initializing Start");
   attachGameStart();
-  Serial.println("Changing message");
   changeMessage(WELCOME, true);
 }
 

@@ -17,7 +17,6 @@ long lastChange;
   Functions to change the message to be displayed on the LCD
 */
 void changeMessage(const char* message, bool scrolling){
-  Serial.println("Changing message");
   lcd.init();
   lcd.backlight();
   lcd.clear();

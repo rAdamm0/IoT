@@ -5,7 +5,7 @@
 #include <EnableInterrupt.h>
 #include <Arduino.h>
 
-int buttons[] = {B1, B2};
+int buttons[] = {BT1, BT2};
 int startGameCounters[] = {0, 0};
 unsigned long lastPressed[] = {0,0};
 

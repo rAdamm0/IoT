@@ -32,7 +32,6 @@ void sleep(){
   off();
   lcdOff();
   attachWakeUp();
-  Serial.println("Going to sleep...");
   delay(1000);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   sleep_enable();

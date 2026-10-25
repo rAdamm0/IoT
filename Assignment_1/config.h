@@ -6,8 +6,8 @@
 #define LG1 6
 #define LG2 5
 
-#define B1 2
-#define B2 4
+#define BT1 8
+#define BT2 4
 
 #define NUM_PLAYERS 2
 

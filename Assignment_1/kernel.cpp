@@ -45,8 +45,6 @@ void changeState(State newState){
   enterStateTime = millis();
   if(newState != state){
     state = newState;
-    Serial.print("Changing state to: ");
-    Serial.println(state);
     switch(state){
       case INITIAL:
         initializeStart();
