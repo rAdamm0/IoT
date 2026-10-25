@@ -1,6 +1,7 @@
 #include "buttons.h"
 #include "states.h"
 #include "leds.h"
+#include "lcd.h"
 
 #include <TimerOne.h>
 #include <avr/sleep.h>
@@ -29,6 +30,7 @@ void initializeTimer(){
 */
 void sleep(){
   off();
+  lcdOff();
   attachWakeUp();
   Serial.println("Going to sleep...");
   delay(1000);

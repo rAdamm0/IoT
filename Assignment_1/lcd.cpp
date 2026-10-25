@@ -8,7 +8,7 @@ LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,20,4);
 int lcdWidth = 20;
 int start = 0;
 int end = 0;
-size_t messageLenght = 0;
+size_t messageLength = 0;
 const char* messageShown;
 bool scroll;
 long lastChange;
@@ -17,15 +17,16 @@ long lastChange;
   Functions to change the message to be displayed on the LCD
 */
 void changeMessage(const char* message, bool scrolling){
+  Serial.println("Changing message");
   lcd.init();
   lcd.backlight();
-  messageShown = message;
-  messageLenght = strlen(messageShown);
+  lcd.clear();
+  messageShown = WELCOME;
+  messageLength = strlen(messageShown);
   start = 0;
-  end = messageLenght<lcdWidth ? messageLenght : lcdWidth;
-  lcd.print(message);
+  end = messageLength < lcdWidth ? messageLength : lcdWidth;
   lcd.noBlink();
-  scroll = scrolling;
+  scroll = true;
   lastChange = 0;
 }
  
@@ -33,22 +34,31 @@ void changeMessage(const char* message, bool scrolling){
   Function to update the screen every loop
 */
 void updateScreen(){
-  if((millis()- lastChange) > DELAY_SCREEN){
-    Serial.println(String(end-start));
-    lastChange = millis();;
+  unsigned long now = millis();
+    if (now - lastChange < DELAY_SCREEN) {
+        return;
+    }
+    lastChange = now;
     char sub[60];
     strncpy(sub, messageShown + start, end);
     sub[lcdWidth] = '\0';
     lcd.setCursor(0,0);
     lcd.print(String(sub));
-    Serial.println(String(sub));
     if(scroll){
-      end = (end + 1) % messageLenght;
+      end = (end + 1) % messageLength;
       start = start +1;
       if(end < start){
         start = 0;
-        end = messageLenght<lcdWidth ? messageLenght : lcdWidth;
+        end = messageLength<lcdWidth ? messageLength : lcdWidth;
       } 
     }
-  }
+}
+
+/**
+  Turns off the screen
+*/
+void lcdOff(){
+  lcd.noBacklight();
+  lcd.clear();
+  lcd.off();
 }

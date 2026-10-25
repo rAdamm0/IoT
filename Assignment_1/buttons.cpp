@@ -32,7 +32,7 @@ void startGameCounter(){
 void attachGameStart(){
   for (int i = 0; i < NUM_PLAYERS; i++){
     pinMode(buttons[i], INPUT_PULLUP);
-    enableInterrupt(buttons[i], startGameCounter, FALLING);
+    //enableInterrupt(buttons[i], startGameCounter, RISING);
   }
 }
 

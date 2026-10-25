@@ -10,4 +10,8 @@ void changeMessage(const char* message, bool scrolling);
 */
 void updateScreen();
 
+/**
+  Turns off the screen
+*/
+void lcdOff();
 #endif

@@ -6,7 +6,7 @@
 
 long enterStateTime;
 long bootTime;
-State state;
+State state = -1;
 
 /**
   Functions that initializes the time management system and state
@@ -45,10 +45,11 @@ void changeState(State newState){
   enterStateTime = millis();
   if(newState != state){
     state = newState;
+    Serial.print("Changing state to: ");
+    Serial.println(state);
     switch(state){
       case INITIAL:
         initializeStart();
-
        break;
       case ROUND: break;
       case END: break;
