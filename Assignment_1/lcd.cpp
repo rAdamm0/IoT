@@ -16,7 +16,7 @@ long lastChange;
 /**
   Functions to change the message to be displayed on the LCD
 */
-void changeMessage(const char* message){
+void changeMessage(const char* message, bool scrolling){
   lcd.init();
   lcd.backlight();
   messageShown = message;
@@ -25,7 +25,7 @@ void changeMessage(const char* message){
   end = messageLenght<lcdWidth ? messageLenght : lcdWidth;
   lcd.print(message);
   lcd.noBlink();
-  scroll = false;
+  scroll = scrolling;
   lastChange = 0;
 }
  
@@ -51,11 +51,4 @@ void updateScreen(){
       } 
     }
   }
-}
-
-/**
-  Sets the message to scroll over the LCD
-*/
-void scrolling(){
-  scroll = true;
 }
