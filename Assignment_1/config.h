@@ -19,5 +19,5 @@
 #define SLEEP_TIME 10//seconds
 #define MAX_WAIT 5000
 #define BOUNCING_TIME 100
-
+#define DELAY_SCREEN 500
 #endif

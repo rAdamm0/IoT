@@ -1,5 +1,8 @@
 #include <LiquidCrystal_I2C.h>
 #include <string.h>
+#include <Arduino.h>
+
+#include "config.h"
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,20,4);
 int lcdWidth = 20;
@@ -30,7 +33,7 @@ void changeMessage(const char* message){
   Function to update the screen every loop
 */
 void updateScreen(){
-  if((millis()- lastChange > DELAY)){
+  if((millis()- lastChange) > DELAY_SCREEN){
     Serial.println(String(end-start));
     lastChange = millis();;
     char sub[60];
