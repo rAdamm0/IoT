@@ -9,8 +9,6 @@
 #define BT1 8
 #define BT2 4
 
-#define POT "A0"
-
 #define NUM_PLAYERS 2
 
 #define WELCOME "Welcome to the React! Game. Press Buttons to Start"
