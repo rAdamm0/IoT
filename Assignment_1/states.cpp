@@ -3,6 +3,7 @@
 #include "buttons.h"
 #include "leds.h"
 #include "lcd.h"
+#include "core.h"
 
 #include <Arduino.h>
 
@@ -19,11 +20,12 @@ void initializeStart(){
   Initializes the system for the game phase
 */
 void initializeGame(){
-  changeMessage("", false);
+  changeMessage(START, false);
   timerStop();
   attachCounter();
-  lcdOff();
   ledsOff();
+  lcdOff();
+  startPhase();
 }
 
 /**

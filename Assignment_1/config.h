@@ -9,7 +9,7 @@
 #define BT1 8
 #define BT2 4
 
-#define POT A0
+#define POT "A0"
 
 #define NUM_PLAYERS 2
 
@@ -22,5 +22,6 @@
 #define MAX_WAIT 5000
 #define BOUNCING_TIME 100
 #define DELAY_SCREEN 500
+#define MAX_T1 5000
 #define FACTOR 50
 #endif

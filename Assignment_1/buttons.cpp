@@ -112,8 +112,3 @@ void attachCounter(){
   enableInterrupt(buttons[1], pressCountP2, FALLING);
   memset(lastPressed, 0, sizeof(lastPressed));
 }
-
-/**
-  Function that starts the game changing the State of the system
-*/
-void startGame();

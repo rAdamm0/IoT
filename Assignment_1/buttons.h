@@ -37,8 +37,4 @@ bool isButtonPressed(int numButton);
 void pressCountP1();
 void pressCountP2();
 
-/**
-  Function that starts the game changing the State of the system
-*/
-void startGame();
 #endif

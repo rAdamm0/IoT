@@ -4,6 +4,7 @@
 #include "config.h"
 #include "leds.h"
 #include "lcd.h"
+#include "core.h"
 
 
 void setup() {
@@ -17,16 +18,17 @@ void loop() {
   switch(state){
     case INITIAL:
       processButtonPresses();
+      fading();
+      updateScreen();
       if(startingGame()){
         changeState(ROUND);
       }
       if(hasTimeElapsed(SLEEP_TIME)){
         sleep();
       }
-      fading();
-      updateScreen();
     break;
     case ROUND:
+      gamePhase();
     break;
     case END:
     break;

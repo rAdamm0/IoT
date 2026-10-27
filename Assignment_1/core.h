@@ -1,5 +1,13 @@
 #ifndef ___CORE____
 #define ___CORE____
+
+enum RoundState {
+  INITIAL,
+  ROUND,
+  END,
+  SLEEP
+};
+
 /**
   Code to run during the startPhase
 */

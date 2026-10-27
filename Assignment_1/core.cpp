@@ -1,9 +1,13 @@
+#include "kernel.h"
+#include "config.h"
+
+#include <Arduino.h>
 
 /**
   Code to run during the startPhase
 */
 void startPhase(){
-
+  int randomWait = random(MAX_WAIT);
 }
 
 /**
@@ -17,7 +21,7 @@ void gamePhase(){
   Code to run for the end phase
 */
 void endPhase(){
-
+  changeState(END);
 }
 
 /**

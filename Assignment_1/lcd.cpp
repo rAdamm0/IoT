@@ -57,6 +57,7 @@ void updateScreen(){
   Turns off the screen
 */
 void lcdOff(){
+  Serial.println("Turning lcd off");
   lcd.noBacklight();
   lcd.clear();
   lcd.off();

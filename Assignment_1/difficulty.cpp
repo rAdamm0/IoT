@@ -1,4 +1,7 @@
 #include "config.h"
+
+#include <Arduino.h>
+
 /**
   Returns the gameDifficulty based on the Potentiometer rotation
 */
