@@ -20,12 +20,19 @@ void changeMessage(const char* message, bool scrolling){
   lcd.init();
   lcd.backlight();
   lcd.clear();
-  messageShown = WELCOME;
+  messageShown = message;
+  Serial.print("Length of message: ");
+  Serial.println(strlen(message));
+  Serial.print("Length of messageShown: ");
+  Serial.println(strlen(messageShown));
+  Serial.print("Content of messageShown: ");
+  Serial.println(messageShown);
+  Serial.println("----------------------------------");
   messageLength = strlen(messageShown);
   start = 0;
   end = messageLength < lcdWidth ? messageLength : lcdWidth;
   lcd.noBlink();
-  scroll = true;
+  scroll = scrolling;
   lastChange = 0;
 }
  
@@ -40,7 +47,7 @@ void updateScreen(){
     lastChange = now;
     char sub[60];
     strncpy(sub, messageShown + start, end);
-    sub[lcdWidth] = '\0';
+    sub[end] = '\0';
     lcd.setCursor(0,0);
     lcd.print(String(sub));
     if(scroll){
