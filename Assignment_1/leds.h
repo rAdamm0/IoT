@@ -11,6 +11,11 @@ void fading();
 void roundWon(int winner);
 
 /**
+  Turns the red led of the player losing a score on for 2 seconds
+*/
+void scoreLost(int index);
+
+/**
   Turns off all the leds
 */
 void ledsOff();

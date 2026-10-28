@@ -8,9 +8,5 @@
 int getDifficulty(){
   int potValue = analogRead(A0);
   int difficulty = map(potValue, 0, 1023, 1, 5);
-  Serial.print("Difficulty is ");
-  Serial.println(difficulty);
-  Serial.print("The pot value is ");
-  Serial.println(potValue);
   return difficulty;
 }

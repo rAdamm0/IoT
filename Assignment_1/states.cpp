@@ -22,9 +22,9 @@ void initializeStart(){
 void initializeGame(){
   changeMessage(START, false);
   timerStop();
-  attachCounter();
   ledsOff();
-  lcdOff();
+  initializeCore();
+  delay(500);
   startPhase();
 }
 

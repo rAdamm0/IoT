@@ -37,4 +37,9 @@ bool isButtonPressed(int numButton);
 void pressCountP1();
 void pressCountP2();
 
+/**
+  Check at end of each round 
+*/
+void countRoundCheck();
+
 #endif

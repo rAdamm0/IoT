@@ -1,6 +1,7 @@
 #include "config.h"
 #include "sleep.h"
 #include "player.h"
+#include "core.h"
 
 #include <EnableInterrupt.h>
 #include <Arduino.h>
@@ -9,6 +10,7 @@ int buttons[] = {BT1, BT2};
 volatile bool buttonPressed[2] = {false, false};
 int startGameCounters[] = {0, 0};
 volatile unsigned long lastPressed[] = {0,0};
+volatile int countPresses[NUM_PLAYERS][COLS] = {{0,0},{0,0}};
 
 void detachInterrupts(){
   for(int i = 0; i < NUM_PLAYERS; i++){
@@ -89,14 +91,45 @@ bool isButtonPressed(int numButton){
 void pressCountP1(){
     if(!isButtonPressed(0)){
         lastPressed[0] = millis();
-        addCount(0);
+        if(isNumberShown() || !isEndTime){
+          countPresses[0][1] = countPresses[0][1] + 1;
+        }else{
+          countPresses[0][0] = countPresses[0][0] + 1;
+        }
     }
 }
 
 void pressCountP2(){
     if(!isButtonPressed(1)){
         lastPressed[1] = millis();
-        addCount(1);
+        if(isNumberShown() || !isEndTime){
+          countPresses[1][1] = countPresses[1][1] + 1;
+        }else{
+          countPresses[1][0] = countPresses[1][0] + 1;
+        }
+    }
+}
+
+void countRoundCheck(){
+  int snapshot[NUM_PLAYERS][COLS];
+    noInterrupts();
+    for (int i = 0; i < NUM_PLAYERS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            snapshot[i][j] = countPresses[i][j];
+        }
+    }
+    interrupts();
+    for (int i = 0; i < NUM_PLAYERS; i++){
+      if(snapshot[i][0] >= 1){
+        Serial.print(i);
+        Serial.println(" Player has pressed out of bounds");
+        addScore(i, -1);
+      }
+      for(int j = 0; j < snapshot[i][1]; j++){
+        Serial.print(i);
+        Serial.println(" Player has got a point");
+        addCount(i);
+      }
     }
 }
 

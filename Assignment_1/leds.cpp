@@ -38,6 +38,12 @@ void roundWon(int winner){
   digitalWrite(greenLeds[winner], LOW);
 }
 
+void scoreLost(int index){
+  Serial.print("Turn ");
+  Serial.print(index);
+  Serial.println(" led on for 2 seconds");
+}
+
 /**
   Turns off all the leds
 */

@@ -1,4 +1,5 @@
 #include "config.h"
+#include "leds.h"
 
 #include <Arduino.h>
 
@@ -30,6 +31,9 @@ int getScore(int player){
   Adds a point to the player with the index in input
 */
 void addScore(int player, int value){
+  if(value < 0){
+    scoreLost(player);
+  }
   scores[player] = scores[player] + value;
 }
 
@@ -51,8 +55,16 @@ void addCount(int player){
   Terminates the round and counts the points and returns the index of the winner
 */
 int endRound(){
+  Serial.print("The ending array is ");
+  for (int i = 0; i < NUM_PLAYERS; i++) {
+    Serial.print(scores[i]-1);
+    Serial.print(" ");
+}
+Serial.println("");
   int scoresIndex = max_element(scores, NUM_PLAYERS);
   points[scoresIndex] = points[scoresIndex] + 1;
+  addScore(scoresIndex, 1);
+  roundWon(scoresIndex);
   return scoresIndex;
 }
 

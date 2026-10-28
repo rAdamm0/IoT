@@ -21,13 +21,6 @@ void changeMessage(const char* message, bool scrolling){
   lcd.backlight();
   lcd.clear();
   messageShown = message;
-  Serial.print("Length of message: ");
-  Serial.println(strlen(message));
-  Serial.print("Length of messageShown: ");
-  Serial.println(strlen(messageShown));
-  Serial.print("Content of messageShown: ");
-  Serial.println(messageShown);
-  Serial.println("----------------------------------");
   messageLength = strlen(messageShown);
   start = 0;
   end = messageLength < lcdWidth ? messageLength : lcdWidth;

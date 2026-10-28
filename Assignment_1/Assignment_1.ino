@@ -28,6 +28,7 @@ void loop() {
       }
     break;
     case ROUND:
+      updateScreen();
       gamePhase();
     break;
     case END:

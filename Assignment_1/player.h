@@ -8,7 +8,7 @@ int getScore(int player);
 /**
   Adds a point to the player with the index in input
 */
-void addScore(int player);
+void addScore(int player, int value);
 
 /**
   Resets the counts and initializes the round

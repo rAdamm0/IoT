@@ -10,6 +10,7 @@
 #define BT2 4
 
 #define NUM_PLAYERS 2
+#define COLS 2
 
 #define WELCOME "Welcome to the React! Game. Press Buttons to Start"
 #define START "Go!"
