@@ -9,19 +9,19 @@ int lcdWidth = 20;
 int start = 0;
 int end = 0;
 size_t messageLength = 0;
-const char* messageShown;
+String messageShown;
 bool scroll;
 long lastChange;
 
 /**
   Functions to change the message to be displayed on the LCD
 */
-void changeMessage(const char* message, bool scrolling){
+void changeMessage(String message, bool scrolling){
   lcd.init();
   lcd.backlight();
   lcd.clear();
   messageShown = message;
-  messageLength = strlen(messageShown);
+  messageLength = message.length();
   start = 0;
   end = messageLength < lcdWidth ? messageLength : lcdWidth;
   lcd.noBlink();
@@ -38,9 +38,7 @@ void updateScreen(){
         return;
     }
     lastChange = now;
-    char sub[60];
-    strncpy(sub, messageShown + start, end);
-    sub[end] = '\0';
+    String sub = messageShown.substring(start, end);
     lcd.setCursor(0,0);
     lcd.print(String(sub));
     if(scroll){
@@ -57,7 +55,6 @@ void updateScreen(){
   Turns off the screen
 */
 void lcdOff(){
-  Serial.println("Turning lcd off");
   lcd.noBacklight();
   lcd.clear();
   lcd.off();

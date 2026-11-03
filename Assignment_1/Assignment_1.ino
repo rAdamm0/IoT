@@ -1,37 +1,31 @@
-#include "kernel.h"
-#include "sleep.h"
-#include "buttons.h"
 #include "config.h"
+#include "states.h"
 #include "leds.h"
+#include "buttons.h"
 #include "lcd.h"
-#include "core.h"
 
+long scoreLostStart;
+
+void setPinModes(){
+  // Setting all the pinModes
+  pinMode(LR1,OUTPUT);
+  pinMode(LR2,OUTPUT);
+  pinMode(LG1,OUTPUT);
+  pinMode(LG2,OUTPUT);
+  pinMode(BT1,INPUT_PULLUP);
+  pinMode(BT2,INPUT_PULLUP);
+}
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  initializeKernel();
+  setPinModes();
+  changeState(INITIAL);
 }
 
 void loop() {
-  State state = getState();
-  switch(state){
-    case INITIAL:
-      processButtonPresses();
-      fading();
-      updateScreen();
-      if(startingGame()){
-        changeState(ROUND);
-      }
-      if(hasTimeElapsed(SLEEP_TIME)){
-        sleep();
-      }
-    break;
-    case ROUND:
-      updateScreen();
-      gamePhase();
-    break;
-    case END:
-    break;
-  }
+  processLeds();
+  updateScreen();
+  processButtons();
+  checkStates();
 }

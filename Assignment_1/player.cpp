@@ -1,76 +1,54 @@
-#include "config.h"
-#include "leds.h"
-
 #include <Arduino.h>
 
-int points[] = {0, 0};
-int scores[] = {0, 0};
+#include "player.h"
+#include "config.h"
+#include "states.h"
+#include "leds.h"
 
-/**
-  Helper function to find the index of the element with max value in an array
-*/
-int max_element(int arr[], int size) {
-    if (size <= 0) return -1;
-    int maxIndex = 0;
-    for (int i = 1; i < size; i++) {
-        if (arr[i] > arr[maxIndex]) {
-            maxIndex = i;
-        }
-    }
-    return maxIndex;
+Player p1;
+Player p2;
+
+Player players[] = {p1, p2};
+
+void setPoints(int player, int points){
+  players[player].roundPoints = points;
 }
 
-/**
-  Returns the score of the player with the index in input
-*/
-int getScore(int player){
-  return scores[player];
+void addScore(int player){
+  /*TODO*/
+  // Must change the state to SHOW_SCORE
+  setWinner(player);
+  players[player].scorePoints = players[player].scorePoints + 1;
 }
 
-/**
-  Adds a point to the player with the index in input
-*/
-void addScore(int player, int value){
-  if(value < 0){
-    scoreLost(player);
-  }
-  scores[player] = scores[player] + value;
+void removeScore(int player){
+  /*TODO*/
+  // Must change the state to SCORE_LOST
+  setLoser(player);
+  players[player].scorePoints = players[player].scorePoints - 1;
+  errorPress = true;
 }
 
-/**
-  Resets the counts and initializes the round
-*/
 void startRound(){
-  int scores[] = {0, 0};
+  for (int i = 0; i < NUM_PLAYERS; i++){
+    players[i].roundPoints = 0;
+  }
 }
 
-/**
-  Adds a value for the indexed player for the current round
-*/
-void addCount(int player){
-  points[player] = points[player] + 1;
+int* endPlayerRound(){
+  int winner = p1.roundPoints > p2.roundPoints ? 0 : 1;
+  addScore(winner);
+  int* scores = (int*)malloc(NUM_PLAYERS*sizeof(int));
+  for(int i = 0; i < NUM_PLAYERS; i++){
+    scores[i] = players[i].roundPoints;
+  }
+  return scores;
 }
 
-/**
-  Terminates the round and counts the points and returns the index of the winner
-*/
-int endRound(){
-  Serial.print("The ending array is ");
-  for (int i = 0; i < NUM_PLAYERS; i++) {
-    Serial.print(scores[i]-1);
-    Serial.print(" ");
-}
-Serial.println("");
-  int scoresIndex = max_element(scores, NUM_PLAYERS);
-  points[scoresIndex] = points[scoresIndex] + 1;
-  addScore(scoresIndex, 1);
-  roundWon(scoresIndex);
-  return scoresIndex;
-}
-
-/**
-  At the end of the game it returns the index of the winning player
-*/
-int getWinner(){
-  return max_element(points,NUM_PLAYERS);
+int endGame(){
+  if(p1.scorePoints == p2.scorePoints){
+    return -1;
+  } else{
+    return p1.scorePoints > p2.scorePoints ? 0 : 1;
+  }
 }

@@ -1,38 +1,34 @@
-#ifndef ___STATES___
-#define ___STATES___
+#ifndef __STATES__
+#define __STATES__
 
-/**
-  Enum of the possible states of the system
-*/
-enum State {
+extern bool errorPress;
+extern bool startGame;
+extern bool endRoundBool;
+
+enum State{
   INITIAL,
-  ROUND,
-  END,
-  SLEEP
+  SLEEP,
+  WAITING,
+  GAME,
+  SCORE_LOST,
+  SHOW_SCORE,
+  GAME_OVER
 };
 
 /**
-  Initializes the system for its initial phase
+  Returns the actual state
 */
-void initializeStart();
+State getState();
 
 /**
-  Initializes the system for the game phase
+  Changes the state to the input and intializes it
 */
-void initializeGame();
+void changeState(State input);
 
 /**
-  Starts the sleep timer for the initial phase
+  Checks the variables and changes the state accordingly
 */
-void sleepTimer();
+void checkStates();
 
-/**
-  Starts the game over timer
-*/
-void gameOverTimer();
 
-/**
-  Starts the end game and reset timer
-*/
-void endTimer();
 #endif

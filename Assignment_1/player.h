@@ -1,32 +1,40 @@
 #ifndef ___PLAYER___
 #define ___PLAYER___
-/**
-  Returns the score of the player with the index in input
-*/
-int getScore(int player);
+
+struct Player{
+  int scorePoints;
+  int roundPoints;
+};
 
 /**
-  Adds a point to the player with the index in input
+  Sets a certain amount of round points to the player
+  @param player index of the player to which add points
+  @param points value that represent the amount of points to be given to the player
 */
-void addScore(int player, int value);
+void setPoints(int player, int points);
+
 
 /**
-  Resets the counts and initializes the round
+  Remove a score point to the player and sets it as loser in @link{setLoser()}
+  @param player player that loses the score
+*/
+void removeScore(int player);
+
+/**
+  Resets the round points for each player
 */
 void startRound();
 
 /**
-  Adds a value for the indexed player for the current round
+  Ends the round and @return the pointer to the array of the score points and calls @link{addScore()} on the winner
 */
-void addCount(int player);
+int* endPlayerRound();
 
 /**
-  Terminates the round and counts the points and returns the index of the winner
+  Ends the game.
+  @return -1 if it is a Tie
+  @return 0 or 1 if the winner is Player 1 or Player 2 respectively
 */
-int endRound();
+int endGame();
 
-/**
-  At the end of the game it returns the index of the winning player
-*/
-int getWinner();
 #endif

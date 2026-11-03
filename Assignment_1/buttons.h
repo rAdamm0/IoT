@@ -1,45 +1,47 @@
 #ifndef ___BUTTONS___
 #define ___BUTTONS___
+
+struct Button{
+  volatile bool pressed;
+  volatile long lastPressed;
+  volatile int counts;
+  int allowedCounts;
+};
+
 /**
-  Attaches to the buttons the function to wake up the system after it goes to sleep
+  Disables the interrupts on every button
+*/
+void disableButtons();
+
+/**
+  Attaches to the buttons the interrupts to wake up from the sleep mode
 */
 void attachWakeUp();
-/**
-  Attachest to the buttons the function to start the game, changing its state.
-*/
-void attachGameStart();
-/**
-	Counter to detect the presses to make the game start in the intial phase
-*/
-void startGameCounter();
-/**
-	Function returning true if both buttons have been pressed, false otherwise
-*/
-bool startingGame();
 
 /**
-  Processes the button presses there have been
+  Attaches to the buttons the interrupts that allows to start the game
 */
-void processButtonPresses();
+void attachStartGame();
 
 /**
-  Attaches to the buttons the function to count the button presses.
+  Attaches to the buttons the interrupts that count the in-game presses
 */
-void attachCounter();
-/**
-  Returns 1 if the buttons is pressed (or has been in a certain interval), 0 otherwise.
-*/
-bool isButtonPressed(int numButton);
-/**
-  Counter function that determines if a button press is to be counted and do so if needed.
-  One function for each player.
-*/
-void pressCountP1();
-void pressCountP2();
+void attachGame();
 
 /**
-  Check at end of each round 
+  Processes the buttons based on the state of the game
 */
-void countRoundCheck();
+void processButtons();
+
+/**
+  Sets the random round value 
+*/
+void setRoundValue(int inValue);
+
+/**
+  Ends the round adding the round points for each player with @link{setPoints()}
+  @return true if no button was pressed, false otherwise
+*/
+bool endRound();
 
 #endif
