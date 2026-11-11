@@ -1,22 +1,21 @@
 #ifndef ___LEDS___
 #define ___LEDS___
-/**
-  Fading leds for the pre-game phase
-*/
-void fading();
 
 /**
-  Turns on the winning led
+  Processes the behavior of the leds based on the state and the possible boolean checks
 */
-void roundWon(int winner);
+void processLeds();
 
 /**
-  Turns the red led of the player losing a score on for 2 seconds
+  Sets the loser of the round as the player in input
+  @param player of the losing player
 */
-void scoreLost(int index);
+void setLoser(int player);
 
 /**
-  Turns off all the leds
+  Sets the winner of the round as the player in input
+  @param player of the winning player
 */
-void ledsOff();
+void setWinner(int player);
+
 #endif

@@ -1,34 +1,34 @@
-#ifndef ___STATES___
-#define ___STATES___
+#ifndef __STATES__
+#define __STATES__
 
-/**
-  Enum of the possible states of the system
-*/
-enum State {
+extern bool errorPress;
+extern bool startGame;
+extern bool endRoundBool;
+
+enum State{
   INITIAL,
-  ROUND,
-  END,
-  SLEEP
+  SLEEP,
+  WAITING,
+  GAME,
+  SCORE_LOST,
+  SHOW_SCORE,
+  GAME_OVER
 };
 
 /**
-  Initializes the system for its initial phase
-*/
-void initializeStart();
-
-/**
-  Initializes the system for the game phase
-*/
-void initializeGame();
-
-
-/**
-  Function that returns the actual state
+  Returns the actual state
 */
 State getState();
 
 /**
-  Function that changes the state
+  Changes the state to the input and intializes it
 */
-void changeState(State newState);
+void changeState(State input);
+
+/**
+  Checks the variables and changes the state accordingly
+*/
+void checkStates();
+
+
 #endif

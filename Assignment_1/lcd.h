@@ -3,7 +3,7 @@
 /**
   Functions to change the message to be displayed on the LCD
 */
-void changeMessage(const char* message, bool scrolling);
+void changeMessage(String message, bool scrolling);
 
 /**
   Function to update the screen every loop

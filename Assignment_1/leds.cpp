@@ -1,6 +1,9 @@
-#include "config.h"
-
 #include <Arduino.h>
+
+#include "config.h"
+#include "states.h"
+#include "leds.h"
+#include "timer.h"
 
 int redLeds[] = {LR1, LR2};
 int greenLeds[] = {LG1, LG2};
@@ -8,17 +11,13 @@ int greenLeds[] = {LG1, LG2};
 int brightness[] = {255, 0};
 int fadeAmount = 1;
 
-bool initiated = false;
+int winner = -1;
+int loser = -1;
+
 /**
   Fading leds for the pre-game phase
 */
 void fading(){
-  if(!initiated){
-    for(int i = 0; i < NUM_PLAYERS; i++){
-      pinMode(redLeds[i],OUTPUT);
-    }
-    initiated = true;
-  }
   for(int i = 0; i < NUM_PLAYERS; i++){
     analogWrite(redLeds[i], brightness[i]);
     brightness[i] = brightness[i] + (pow(-1,i+1)*fadeAmount);
@@ -28,28 +27,45 @@ void fading(){
   }
 }
 
-/**
-  Turns on the green winning led
-  @param winner The index of the winner (0 for the first player, ecc...)
-*/
-void roundWon(int winner){
+void onLoser(){
+  digitalWrite(redLeds[loser], HIGH);
+}
+
+void onWinner(){
   digitalWrite(greenLeds[winner], HIGH);
-  delay(2000);
-  digitalWrite(greenLeds[winner], LOW);
 }
 
-void scoreLost(int index){
-  Serial.print("Turn ");
-  Serial.print(index);
-  Serial.println(" led on for 2 seconds");
+void setLoser(int player){
+  loser = player;
 }
 
-/**
-  Turns off all the leds
-*/
-void ledsOff(){
-  for(int i = 0; i < NUM_PLAYERS; i++){
+void setWinner(int player){
+  winner = player;
+}
+
+void off(){
+  for(int i = 0; i<NUM_PLAYERS;i++){
     digitalWrite(redLeds[i], LOW);
     digitalWrite(greenLeds[i], LOW);
+  }
+}
+
+void processLeds(){
+  State state = getState();
+  switch(state){
+    case INITIAL:
+      fading();
+      break;
+    case SCORE_LOST:
+        onLoser();
+      break;
+    case SHOW_SCORE:
+        onWinner();
+      break;
+    default: 
+      loser = -1;
+      winner = -1;
+      off(); 
+      break;
   }
 }

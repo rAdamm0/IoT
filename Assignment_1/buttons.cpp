@@ -1,147 +1,173 @@
-#include "config.h"
-#include "sleep.h"
-#include "player.h"
-#include "core.h"
-
 #include <EnableInterrupt.h>
 #include <Arduino.h>
 
-int buttons[] = {BT1, BT2};
-volatile bool buttonPressed[2] = {false, false};
-int startGameCounters[] = {0, 0};
-volatile unsigned long lastPressed[] = {0,0};
-volatile int countPresses[NUM_PLAYERS][COLS] = {{0,0},{0,0}};
+#include "buttons.h"
+#include "states.h"
+#include "player.h"
+#include "config.h"
+#include "timer.h"
 
-void detachInterrupts(){
+Button *b1 = new Button{};
+Button *b2 = new Button{};
+
+int buttons[] = {BT1, BT2};
+bool lastCycle;
+int value = -1;
+
+void disableButtons(){
   for(int i = 0; i < NUM_PLAYERS; i++){
     disableInterrupt(buttons[i]);
   }
 }
 
-/**
-  Attaches to the buttons the function to wake up the system after it goes to sleep
-*/
+void wakeUp(){}
+
 void attachWakeUp(){
-  detachInterrupts();
-  for (int i = 0; i < NUM_PLAYERS; i++){
-      pinMode(buttons[i], INPUT_PULLUP);
-      enableInterrupt(buttons[i], wakeUp, FALLING);
+  disableButtons();
+  for(int i = 0; i < NUM_PLAYERS; i++){
+    enableInterrupt(buttons[i], wakeUp, CHANGE);
   }
-  memset(startGameCounters, 0, sizeof(startGameCounters));
-  
-  
 }
 
-void button1ISR() {
-  buttonPressed[0] = true;
+void bt1StartGame(){
+  b1->pressed = true;
 }
 
-void button2ISR() {
-  buttonPressed[1] = true;
+void bt2StartGame(){
+  b2->pressed = true;
 }
 
-/**
-  Attachest to the buttons the function to start the game, changing its state.
-*/
-void attachGameStart(){
-  detachInterrupts();
-  for (int i = 0; i < NUM_PLAYERS; i++) {
-    pinMode(buttons[i], INPUT_PULLUP);
+void attachStartGame(){
+  disableButtons();
+  enableInterrupt(BT1, bt1StartGame, FALLING);
+  enableInterrupt(BT2, bt2StartGame, FALLING);
+}
+
+void b1Game(){
+  if(millis() - b1->lastPressed > BOUNCING){
+    b1->lastPressed = millis();
+    b1->counts = b1->counts + 1;
   }
-  enableInterrupt(buttons[0], button1ISR, FALLING);
-  enableInterrupt(buttons[1], button2ISR, FALLING);
 }
 
-void processButtonPresses() {
+void b2Game(){
+  if(millis() - b2->lastPressed > BOUNCING){
+    b2->lastPressed = millis();
+    b2->counts = b2->counts + 1;
+  }
+}
+
+void attachGame(){
+  disableButtons();
+  enableInterrupt(BT1, b1Game, FALLING);
+  enableInterrupt(BT2, b2Game, FALLING);
+}
+
+void resetCounts(){
   noInterrupts();
-  bool pressed1 = buttonPressed[0];
-  bool pressed2 = buttonPressed[1];
-  buttonPressed[0] = false;
-  buttonPressed[1] = false;
+  b1->counts = 0;
+  b2->counts = 0;
   interrupts();
-  if (pressed1 && startGameCounters[0] == 0) {
-    startGameCounters[0] = 1;
-    initializeTimer();
-  }
-  if (pressed2 && startGameCounters[1] == 0) {
-    startGameCounters[1] = 1;
-    initializeTimer();
-  }
 }
 
-bool startingGame(){
-  int sum = 0;
-    for(int i = 0; i < NUM_PLAYERS; i++) {
-        sum += startGameCounters[i];
-    }
-    return sum == NUM_PLAYERS;
-}
-
-/**
-  Returns 1 if the buttons is pressed (or has been in a certain interval), 0 otherwise.
-*/
-bool isButtonPressed(int numButton){
-  return (millis() - lastPressed[numButton]) < BOUNCING_TIME;
-}
-
-/**
-  Counter function that determines if a button press is to be counted and do so if needed.
-  One function for each player.
-*/
-void pressCountP1(){
-    if(!isButtonPressed(0)){
-        lastPressed[0] = millis();
-        if(isNumberShown() || !isEndTime){
-          countPresses[0][1] = countPresses[0][1] + 1;
-        }else{
-          countPresses[0][0] = countPresses[0][0] + 1;
-        }
-    }
-}
-
-void pressCountP2(){
-    if(!isButtonPressed(1)){
-        lastPressed[1] = millis();
-        if(isNumberShown() || !isEndTime){
-          countPresses[1][1] = countPresses[1][1] + 1;
-        }else{
-          countPresses[1][0] = countPresses[1][0] + 1;
-        }
-    }
-}
-
-void countRoundCheck(){
-  int snapshot[NUM_PLAYERS][COLS];
-    noInterrupts();
-    for (int i = 0; i < NUM_PLAYERS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            snapshot[i][j] = countPresses[i][j];
-        }
-    }
-    interrupts();
-    for (int i = 0; i < NUM_PLAYERS; i++){
-      if(snapshot[i][0] >= 1){
-        Serial.print(i);
-        Serial.println(" Player has pressed out of bounds");
-        addScore(i, -1);
+void processButtons(){
+  State state = getState();
+  switch(state){
+    case INITIAL:{
+      noInterrupts();
+      bool pressed1 = b1->pressed;
+      bool pressed2 = b2->pressed;
+      interrupts();
+      if(pressed1 && pressed2){
+        /*TODO*/
+        //Change State to Waiting
+        startGame = true;
+      } else if(lastCycle != (pressed1 || pressed2)){
+        timerReset();
+        lastCycle = pressed1 || pressed2;
       }
-      for(int j = 0; j < snapshot[i][1]; j++){
-        Serial.print(i);
-        Serial.println(" Player has got a point");
-        addCount(i);
-      }
+      break;
     }
+    case WAITING:{
+      noInterrupts();
+      int count1 = b1->counts;
+      int count2 = b2->counts;
+      long lastpress1 = b1->lastPressed;
+      long lastpress2 = b2->lastPressed;
+      interrupts();
+      switch(count1 + count2){
+        case 0:return; break;
+        case 1:
+          resetCounts();
+          if(count1==1){
+            removeScore(0);
+          } else {
+            removeScore(1);
+          }
+          break;
+        case 2:
+          resetCounts();
+          if(lastpress1 < lastpress2){
+            removeScore(0);
+          } else {
+            removeScore(1);
+          }
+      }
+      break;
+    }
+    case GAME:{
+      noInterrupts();
+      int countGame1 = b1->counts;
+      int countGame2 = b2->counts;
+      long lastpressGame1 = b1->lastPressed;
+      long lastpressGame2 = b2->lastPressed;
+      interrupts();
+      if(value == -1) return;
+      if(countGame1+countGame2 >= 1) {
+        timerStop();
+      }
+      if(countGame1 > value && countGame2 > value){
+        resetCounts();
+        if(lastpressGame1 < lastpressGame2){
+          removeScore(0);
+          return;
+        }else{
+          removeScore(1);
+          return;
+        }
+      }
+      if(countGame1 > value) {
+        resetCounts();
+        removeScore(0);
+      }
+      if(countGame2 > value){
+        resetCounts();
+        removeScore(1);
+      }
+      b1->allowedCounts = countGame1;
+      b2->allowedCounts = countGame2;
+      break;
+    }
+  }
 }
 
-/**
-  Attaches to the buttons the function to count the button presses.
-*/
-void attachCounter(){
-  detachInterrupts();
-  for (int i = 0; i < NUM_PLAYERS; i++){
-    pinMode(buttons[i], INPUT_PULLUP);
-  }
-  enableInterrupt(buttons[0], pressCountP1, FALLING);
-  enableInterrupt(buttons[1], pressCountP2, FALLING);
-  memset(lastPressed, 0, sizeof(lastPressed));
+bool endRound(){
+  /*TODO*/
+  //Make sure this is called before changing the state from GAME
+  processButtons();
+  int points1 = b1->allowedCounts;
+  int points2 = b2->allowedCounts;
+  setPoints(0, b1->allowedCounts);
+  setPoints(1, b2->allowedCounts);
+  disableButtons();
+  delete b1;
+  delete b2;
+  b1 = new Button{};
+  b2 = new Button{};
+  value = -1;
+  return points1 == 0 && points2 == 0;
+}
+
+void setRoundValue(int inValue){
+  value = inValue;
 }

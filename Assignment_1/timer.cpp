@@ -1,66 +1,50 @@
-#include "buttons.h"
-#include "states.h"
-#include "leds.h"
-#include "lcd.h"
-
+#include <Arduino.h>
 #include <TimerOne.h>
-#include <avr/sleep.h>
 
-volatile int seconds = 0;
+#include "timer.h"
 
-/**
-  Counts the seconds allowing the timer to keep track of more than the 8.83s allowed for TimerOne
-*/
-void countSeconds(){
-  seconds++;
+#define MAX_MESSAGE_LEN 80
+
+volatile bool* temp = nullptr;
+volatile int count = 0;
+int counter = 0;
+int actualCount;
+String description = "Error: No Timer Set - This description should not be visible";
+
+void functionISR(){
+  if (temp == nullptr) {
+        return;
+    }
+    count++;
+    if (count >= counter) {
+        *temp = true;
+        Timer1.stop();
+    }
 }
 
-/**
-  Initialize the system to go into a phase to sleep
-*/
-void initializeTimer(){
-  seconds = 0;
-  Timer1.initialize(1000000);
-  Timer1.attachInterrupt(countSeconds);
-
-}
-
-/**
-  Sets the system into sleep mode
-*/
-void sleep(){
-  ledsOff();
-  lcdOff();
-  attachWakeUp();
-  delay(1000);
-  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  sleep_enable();
-  interrupts();
-  sleep_mode();
-  sleep_disable();
-  initializeStart();
-}
-
-/**
-  Function used to solely wake the system
-*/
-void wakeUp(){}
-
-/**
-  Checks if it's time to sleep, and sleeps if it is
-  @param time seconds to check if have elapsed
-*/
-bool hasTimeElapsed(int time){
-  int tempSeconds;
-  noInterrupts();
-  tempSeconds = seconds;
-  interrupts();
-  return tempSeconds >= time;
-}
-
-/**
-  Functions to reset the timer in case of state change
-*/
-void timerStop(){
+void timerInitialize(String inDescription, bool* boolVal, unsigned long timerValue, unsigned long inCount){
+  Serial.println("Inizializing new timer: " + inDescription);
   Timer1.detachInterrupt();
+  Timer1.stop();
+  noInterrupts();
+  temp = boolVal;
+  count = 0;
+  counter = inCount;
+  if (temp != nullptr) {
+      *temp = false;
+  }
+  interrupts();
+  description = inDescription;
+  Timer1.initialize(timerValue*1000);
+  Timer1.attachInterrupt(functionISR);
+}
+
+void timerStop(){
+  counter = 0;
+}
+
+void timerReset(){
+  noInterrupts();
+  count = 0;
+  interrupts();
 }
