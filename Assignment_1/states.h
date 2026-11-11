@@ -21,18 +21,14 @@ void initializeStart();
 */
 void initializeGame();
 
-/**
-  Starts the sleep timer for the initial phase
-*/
-void sleepTimer();
 
 /**
-  Starts the game over timer
+  Function that returns the actual state
 */
-void gameOverTimer();
+State getState();
 
 /**
-  Starts the end game and reset timer
+  Function that changes the state
 */
-void endTimer();
+void changeState(State newState);
 #endif

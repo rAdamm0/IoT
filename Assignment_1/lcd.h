@@ -14,4 +14,5 @@ void updateScreen();
   Turns off the screen
 */
 void lcdOff();
+
 #endif

@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 
-int points[] = {0, 0};
-int scores[] = {0, 0};
+
+Player players[] ={Player p1, Player p2};
 
 /**
   Helper function to find the index of the element with max value in an array

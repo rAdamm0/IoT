@@ -28,14 +28,29 @@ void initializeGame(){
   startPhase();
 }
 
-/**
-  Starts the game over timer
-*/
-void gameOverTimer();
 
 /**
-  Starts the end game and reset timer
+  Function that returns the actual state
 */
-void endTimer(){
-  initializeTimer();
+State getState(){
+  return state;
+}
+
+/**
+  Function that changes the state
+*/
+void changeState(State newState){
+  enterStateTime = millis();
+  if(newState != state){
+    state = newState;
+    switch(state){
+      case INITIAL:
+        initializeStart();
+       break;
+      case ROUND:
+        initializeGame();
+       break;
+      case END: break;
+    }
+  }
 }
